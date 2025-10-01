@@ -53,9 +53,26 @@
 
     Replace the comment in the script tag below with the snippet from Salesforce Setup → Embedded Service Deployments → Get Code
   -->
-  <script>
-    /* PASTE SALESFORCE EMBEDDED-SERVICE SNIPPET HERE */
-  </script>
+<script type='text/javascript'>
+	function initEmbeddedMessaging() {
+		try {
+			embeddedservice_bootstrap.settings.language = 'en_US'; // For example, enter 'en' or 'en-US'
+
+			embeddedservice_bootstrap.init(
+				'00DgK000008l5fZ',
+				'Messaging_Channel_for_External_Website',
+				'https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540',
+				{
+					scrt2URL: 'https://orgfarm-de8616b37d-dev-ed.develop.my.salesforce-scrt.com'
+				}
+			);
+		} catch (err) {
+			console.error('Error loading Embedded Messaging: ', err);
+		}
+	};
+</script>
+<script type='text/javascript' src='https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540/assets/js/bootstrap.min.js' onload='initEmbeddedMessaging()'></script>
+
 
   <script>
     // Small demo behaviour: hitting Enter or clicking Search opens a new tab with a simple search query (for demo only).
