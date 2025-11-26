@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agentforce Search Chat Inline</title>
+<title>Agentforce Search Chat Popup</title>
 
-<!-- Explicitly include Embedded Messaging CSS to avoid preload warning -->
+<!-- Include Embedded Messaging CSS -->
 <link rel="stylesheet" href="https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540/assets/styles/embedded-messaging-styling.min.css">
 
 <style>
@@ -15,26 +15,55 @@ h1 { color: #2c3e50; }
 #search-input { width: 50%; padding: 12px; font-size: 16px; border-radius: 5px; border: 1px solid #ccc; }
 #search-button { padding: 12px 20px; font-size: 16px; margin-left: 10px; border-radius: 5px; border: none; background-color: #0070d2; color: white; cursor: pointer; }
 #search-button:hover { background-color: #005fb2; }
-#chat-container { width: 600px; height: 500px; margin: 30px auto; border: 1px solid #ccc; border-radius: 8px; background: white; display: none; }
+
+/* Chat popup modal */
+#chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    width: 400px;
+    height: 500px;
+    border: 1px solid #ccc;
+    background: white;
+    z-index: 1000;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+#chat-popup #chat-container { width: 100%; height: 100%; }
+#close-chat {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #d9534f;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+#close-chat:hover { background: #c9302c; }
 </style>
 </head>
 <body>
 
 <h1>Agentforce Search Chat</h1>
-<p>Type a query and click Search to open chat below.</p>
+<p>Type a query and click Search to open chat in a popup.</p>
 
 <div id="search-container">
   <input type="text" id="search-input" placeholder="Enter your question...">
   <button id="search-button" disabled>Search</button>
 </div>
 
-<!-- Inline chat container -->
-<div id="chat-container"></div>
+<!-- Chat popup modal -->
+<div id="chat-popup">
+    <button id="close-chat">X</button>
+    <div id="chat-container"></div>
+</div>
 
 <script type="text/javascript">
 function initEmbeddedMessaging() {
     try {
-        // Hide default floating chat icon
         embeddedservice_bootstrap.settings.displayHelpButton = false;
         embeddedservice_bootstrap.settings.language = 'en_US';
 
@@ -44,7 +73,7 @@ function initEmbeddedMessaging() {
             'https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540', // Site URL
             {
                 scrt2URL: 'https://orgfarm-de8616b37d-dev-ed.develop.my.salesforce-scrt.com',
-                widgetLocation: '#chat-container' // Embed chat inline
+                widgetLocation: '#chat-container' // Embed chat inline in popup
             }
         );
     } catch (err) {
@@ -52,7 +81,7 @@ function initEmbeddedMessaging() {
     }
 }
 
-// Wait until Embedded Messaging is ready
+// When Embedded Messaging is ready
 window.addEventListener("onEmbeddedMessagingReady", () => {
     console.log('Embedded Messaging is ready.');
 
@@ -60,15 +89,13 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
     const searchBtn = document.getElementById('search-button');
     searchBtn.disabled = false;
 
-    // Set hidden pre-chat field
-    if (embeddedservice_bootstrap && embeddedservice_bootstrap.prechatAPI) {
-        embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
-            'HiddenPrechatEmail': 'contactreply@mailinator.com'
-        });
-        console.log('Hidden pre-chat email set.');
-    }
+    // Close button logic
+    const closeBtn = document.getElementById('close-chat');
+    closeBtn.addEventListener('click', () => {
+        document.getElementById('chat-popup').style.display = 'none';
+    });
 
-    // Show chat container on search button click
+    // Search button click: show popup and pass search query
     searchBtn.addEventListener('click', () => {
         const query = document.getElementById('search-input').value.trim();
         if (!query) {
@@ -78,11 +105,15 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
 
         console.log('User search query:', query);
 
-        // Show inline chat
-        const chatContainer = document.getElementById('chat-container');
-        chatContainer.style.display = 'block';
+        // Show chat popup
+        document.getElementById('chat-popup').style.display = 'block';
 
-        // Optionally, you can log or send the search query via hidden pre-chat fields
+        // Set hidden pre-chat field so agent sees the query
+        if (embeddedservice_bootstrap && embeddedservice_bootstrap.prechatAPI) {
+            embeddedservice_bootstrap.prechatAPI.setHiddenPrechatFields({
+                'UserSearchQuery': query
+            });
+        }
     });
 });
 </script>
