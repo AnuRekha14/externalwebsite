@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agentforce Search Chat Inline</title>
 
-<!-- Embedded Messaging CSS included explicitly -->
+<!-- Explicitly include Embedded Messaging CSS to avoid preload warning -->
 <link rel="stylesheet" href="https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540/assets/styles/embedded-messaging-styling.min.css">
 
 <style>
@@ -68,7 +68,7 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
         console.log('Hidden pre-chat email set.');
     }
 
-    // Search button click: show inline chat
+    // Show chat container on search button click
     searchBtn.addEventListener('click', () => {
         const query = document.getElementById('search-input').value.trim();
         if (!query) {
@@ -78,8 +78,11 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
 
         console.log('User search query:', query);
 
-        // Show the chat container
-        document.getElementById('chat-container').style.display = 'block';
+        // Show inline chat
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.style.display = 'block';
+
+        // Optionally, you can log or send the search query via hidden pre-chat fields
     });
 });
 </script>
