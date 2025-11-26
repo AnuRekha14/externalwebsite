@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agentforce Search Chat Inline</title>
 
-<!-- Include Embedded Messaging CSS explicitly -->
+<!-- Embedded Messaging CSS included explicitly -->
 <link rel="stylesheet" href="https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540/assets/styles/embedded-messaging-styling.min.css">
 
 <style>
@@ -34,7 +34,7 @@ h1 { color: #2c3e50; }
 <script type="text/javascript">
 function initEmbeddedMessaging() {
     try {
-        // Hide default floating chat
+        // Hide default floating chat icon
         embeddedservice_bootstrap.settings.displayHelpButton = false;
         embeddedservice_bootstrap.settings.language = 'en_US';
 
@@ -44,7 +44,7 @@ function initEmbeddedMessaging() {
             'https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540', // Site URL
             {
                 scrt2URL: 'https://orgfarm-de8616b37d-dev-ed.develop.my.salesforce-scrt.com',
-                widgetLocation: '#chat-container' // Embed chat inline in this div
+                widgetLocation: '#chat-container' // Embed chat inline
             }
         );
     } catch (err) {
@@ -52,7 +52,7 @@ function initEmbeddedMessaging() {
     }
 }
 
-// Wait until embedded messaging is ready
+// Wait until Embedded Messaging is ready
 window.addEventListener("onEmbeddedMessagingReady", () => {
     console.log('Embedded Messaging is ready.');
 
@@ -68,7 +68,7 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
         console.log('Hidden pre-chat email set.');
     }
 
-    // Handle search button click
+    // Search button click: show inline chat
     searchBtn.addEventListener('click', () => {
         const query = document.getElementById('search-input').value.trim();
         if (!query) {
@@ -78,7 +78,7 @@ window.addEventListener("onEmbeddedMessagingReady", () => {
 
         console.log('User search query:', query);
 
-        // Show the chat container (inline chat already initialized)
+        // Show the chat container
         document.getElementById('chat-container').style.display = 'block';
     });
 });
