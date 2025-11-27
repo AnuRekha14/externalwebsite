@@ -77,6 +77,9 @@
             function initEmbeddedMessaging() {
                 try {
                     embeddedservice_bootstrap.settings.language = 'en_US';
+                    
+                    // Hide the chat button on page load
+                    embeddedservice_bootstrap.settings.hideChatButtonOnLoad = true;
 
                     embeddedservice_bootstrap.init(
                         '00DgK000008l5fZ',
