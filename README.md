@@ -83,4 +83,124 @@
                         'Messaging_Channel_for_External_Website',
                         'https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540',
                         {
-                            scrt2URL: 'https://orgfarm-de8616b37d-dev-
+                            scrt2URL: 'https://orgfarm-de8616b37d-dev-ed.develop.my.salesforce-scrt.com'
+                        }
+                    );
+                } catch (err) {
+                    console.error('Error loading Embedded Messaging: ', err);
+                }
+            };
+        </script>
+
+        <script 
+            type='text/javascript'
+            src='https://orgfarm-de8616b37d-dev-ed.develop.my.site.com/ESWMessagingChannelfor1759308457540/assets/js/bootstrap.min.js'
+            onload='initEmbeddedMessaging()'>
+        </script>
+    </head>
+    
+    <body>
+        <div>
+            Welcome to our Chat Service!
+            <br/><br/>
+        </div>
+        <div class="chat-container">
+            <div>
+                Please select the menu or enter the message to get started.
+                <br/>
+            </div>
+            <div>
+                <br/><br/>
+                <button class="send-message-button" id="orderButton">
+                    Need help with my Order
+                </button>
+                <br/><br/>
+                <button class="send-message-button" id="caseButton">
+                    Need help with my Case
+                </button>
+                <br/><br/>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type a message..." />
+                <button class="send-button" id="sendBtn">➤</button>
+            </div>
+        </div>
+
+        <script>
+            function showChatContainer() {
+                const chatContainer = document.querySelector('.chat-container');
+                chatContainer.style.display = 'block';
+            }
+
+            function hideChatContainer() {
+                const chatContainer = document.querySelector('.chat-container');
+                chatContainer.style.display = 'none';
+            }
+            
+            function launchChat(message) {
+                embeddedservice_bootstrap.utilAPI.launchChat()
+                    .then(() => {
+                        console.log('Successfully launched Messaging');
+                        sendMessageToChat(message);
+                    })
+                    .catch(() => {
+                        console.log('Some error occurred when launching Messaging');
+                    })
+                    .finally(() => {
+                        console.log('Successfully launched Messaging - Finally');
+                    });
+            }
+            
+            function sendMessageToChat(message) {
+                setTimeout(() => {
+                    embeddedservice_bootstrap.utilAPI.sendTextMessage(message)
+                        .then(() => {
+                            console.log("Message sent");
+                        })
+                        .catch(() => {
+                            console.log("Message not sent");
+                        })
+                        .finally(() => {
+                            console.log("Message sent - finally");
+                        });
+                }, 8000);
+            }
+            
+            const sendBtn = document.getElementById('sendBtn');
+            const chatInput = document.getElementById('chatInput');
+            sendBtn.addEventListener('click', () => {
+                const message = chatInput.value.trim();
+                if (message) {
+                    console.log(message);
+                    chatInput.value = '';
+                    hideChatContainer();
+                    launchChat(message);
+                } else {
+                    alert("Please enter a message first!");
+                }
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendBtn.click();
+                }
+            });
+            
+            const orderButton = document.getElementById('orderButton');
+            orderButton.addEventListener('click', function() {
+                const orderButtonText = orderButton.textContent.trim();
+                console.log(orderButtonText);
+                hideChatContainer(); // Close popup immediately
+                launchChat(orderButtonText);
+            });
+            
+            const caseButton = document.getElementById('caseButton');
+            caseButton.addEventListener('click', function() {
+                const caseButtonText = caseButton.textContent.trim();
+                console.log(caseButtonText);
+                hideChatContainer(); // Close popup immediately
+                launchChat(caseButtonText);
+            }); 
+        </script>
+    </body>
+</html>
